@@ -99,7 +99,7 @@ class ModifierExample extends OrderModifier {
 
 // ######################################## *** Type Functions (IsChargeable, IsDeductable, IsNoChange, IsRemoved)
 
-	protected function IsChargeable () {
+	public function IsChargeable () {
 		return true;
 	}
 
