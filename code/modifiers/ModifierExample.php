@@ -95,7 +95,9 @@ class ModifierExample extends OrderModifier {
 
 // ######################################## *** calculate database fields: protected function Live[field name]  ... USES CALCULATED VALUES
 
-
+	protected function LiveName() {
+		return "EXAMPLE: ".$this->LiveMyField();
+	}
 
 	protected function LiveMyField() {
 		return $this->MyField;
