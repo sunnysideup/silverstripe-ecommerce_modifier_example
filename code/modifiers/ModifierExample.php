@@ -13,7 +13,8 @@ class ModifierExample extends OrderModifier {
 // ######################################## *** model defining static variables (e.g. $db, $has_one)
 
 	public static $db = array(
-		"MyField" => "Varchar"
+		"MyField" => "Varchar",
+		"MyReduction" => "Currency"
 	);
 
 	public static $defaults = array("Type" => "Chargeable");
@@ -41,11 +42,17 @@ class ModifierExample extends OrderModifier {
 
 	public function runUpdate() {
 		$this->checkField("MyField");
+		$this->checkField("MyReduction");
 		parent::runUpdate();
 	}
 
-	function updateMyField($myField) {
-		$this->MyField = $myField;
+	function updateMyField($s) {
+		$this->MyField = $s;
+	}
+
+	function updateMyReduction($int) {
+		$this->MyReduction = $int;
+		$this->CalculationValue = -1 * $int;
 	}
 
 // ######################################## *** form functions (e. g. showform and getform)
@@ -56,11 +63,9 @@ class ModifierExample extends OrderModifier {
 	}
 
 	function getModifierForm($controller) {
-		Requirements::themedCSS($this->ClassName);
-		Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
-		Requirements::javascript(THIRDPARTY_DIR."/jquery-form/jquery.form.js");
 		$fields = new FieldSet();
-		$fields->push(new TextField('MyField'));
+		$fields->push(new TextField('MyField', "enter value for testing", $this->MyField));
+		$fields->push(new NumericField('MyReduction', "what discount would you like?", $this->MyReduction));
 		$validator = null;
 		$actions = new FieldSet(
 			new InlineFormAction('submit', 'Update Order')
@@ -77,7 +82,7 @@ class ModifierExample extends OrderModifier {
 		return false;
 	}
 	public function TableValue() {
-		return $this->Amount;
+		return $this->MyReduction;
 	}
 
 	public function TableTitle() {
@@ -94,6 +99,11 @@ class ModifierExample extends OrderModifier {
 
 	protected function LiveMyField() {
 		return $this->MyField;
+	}
+
+
+	protected function LiveMyReduction() {
+		return $this->MyReduction;
 	}
 
 
@@ -116,17 +126,18 @@ class ModifierExample extends OrderModifier {
 
 class ModifierExample_Form extends OrderModifierForm {
 
-	public function submit($data) {
+	public function submit($data, $form) {
 		$order = ShoppingCart::current_order();
 		$modifiers = $order->Modifiers();
 		foreach($modifiers as $modifier) {
 			if (get_class($modifier) == 'ModifierExample') {
 				if(isset($data['MyField'])) {
 					$modifier->updateMyField(Convert::raw2sql($data["MyField"]));
+					$modifier->updateMyReduction(floatval($data["MyReduction"]));
 					$modifier->write();
 				}
 			}
 		}
-		return parent::submit($data);
+		return parent::submit($data, $form);
 	}
 }
