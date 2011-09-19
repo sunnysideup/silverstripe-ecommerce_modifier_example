@@ -85,7 +85,8 @@ class ModifierExample extends OrderModifier {
 		return $this->MyReduction;
 	}
 
-	public function TableTitle() {
+	public function TableTitle() {return $this->getTableTitle();}
+	public function getTableTitle() {
 		return $this->MyField;
 	}
 
