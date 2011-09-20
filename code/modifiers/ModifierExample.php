@@ -12,12 +12,14 @@ class ModifierExample extends OrderModifier {
 
 // ######################################## *** model defining static variables (e.g. $db, $has_one)
 
+	/**
+	 * add extra fields as you need them.
+	 *
+	 **/
 	public static $db = array(
 		"MyField" => "Varchar",
 		"MyReduction" => "Currency"
 	);
-
-	public static $defaults = array("Type" => "Chargeable");
 
 // ######################################## *** cms variables + functions (e.g. getCMSFields, $searchableFields)
 
@@ -40,6 +42,14 @@ class ModifierExample extends OrderModifier {
 // ######################################## *** CRUD functions (e.g. canEdit)
 // ######################################## *** init and update functions
 
+	/**
+	 * For all modifers with their own database fields, we need to include this...
+	 * It will update each of the fields.
+	 * With this, we also need to create the methods
+	 * Live{functionName}
+	 * e.g LiveMyField() and LiveMyReduction() in this case...
+	 **/
+
 	public function runUpdate() {
 		$this->checkField("MyField");
 		$this->checkField("MyReduction");
@@ -52,7 +62,6 @@ class ModifierExample extends OrderModifier {
 
 	function updateMyReduction($int) {
 		$this->MyReduction = $int;
-		$this->CalculationValue = -1 * $int;
 	}
 
 // ######################################## *** form functions (e. g. showform and getform)
@@ -79,7 +88,7 @@ class ModifierExample extends OrderModifier {
 		return true;
 	}
 	public function CanBeRemoved() {
-		return false;
+		return true;
 	}
 	public function TableValue() {
 		return $this->MyReduction;
@@ -96,6 +105,14 @@ class ModifierExample extends OrderModifier {
 
 // ######################################## *** calculate database fields: protected function Live[field name]  ... USES CALCULATED VALUES
 
+	/**
+	 * if we want to change the default value for the Name field
+	 * (defined in the OrderModifer class) then we can do this
+	 * as shown in the method below.
+	 * You may choose to return an empty string or just a standard message.
+	 *
+	 *
+	 **/
 	protected function LiveName() {
 		return "EXAMPLE: ".$this->LiveMyField();
 	}
@@ -103,7 +120,6 @@ class ModifierExample extends OrderModifier {
 	protected function LiveMyField() {
 		return $this->MyField;
 	}
-
 
 	protected function LiveMyReduction() {
 		return $this->MyReduction;
