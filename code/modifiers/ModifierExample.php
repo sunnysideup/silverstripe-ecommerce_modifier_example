@@ -77,7 +77,7 @@ class ModifierExample extends OrderModifier {
 		$fields->push(new NumericField('MyReduction', "what discount would you like?", $this->MyReduction));
 		$validator = null;
 		$actions = new FieldSet(
-			new InlineFormAction('submit', 'Update Order')
+			new FormAction('submit', 'Update Order')
 		);
 		return new ModifierExample_Form($controller, 'ModifierExample', $fields, $actions, $validator);
 	}
@@ -125,12 +125,14 @@ class ModifierExample extends OrderModifier {
 		return $this->MyReduction;
 	}
 
+	protected function LiveCalculationValue() {
+		return (intval($this->MyReduction) - 0) * -1;
+	}
+
 
 // ######################################## *** Type Functions (IsChargeable, IsDeductable, IsNoChange, IsRemoved)
 
-	public function IsChargeable () {
-		return true;
-	}
+
 
 // ######################################## *** standard database related functions (e.g. onBeforeWrite, onAfterWrite, etc...)
 
@@ -145,6 +147,11 @@ class ModifierExample extends OrderModifier {
 
 class ModifierExample_Form extends OrderModifierForm {
 
+	function __construct($optionalController = null, $name,FieldSet $fields, FieldSet $actions,$validator = null) {
+		parent::__construct($optionalController, $name,$fields,$actions,$validator);
+		Requirements::javascript("ecommerce_modifier_example/javascript/ModifierExample.js");
+	}
+
 	public function submit($data, $form) {
 		$order = ShoppingCart::current_order();
 		$modifiers = $order->Modifiers();
@@ -154,9 +161,10 @@ class ModifierExample_Form extends OrderModifierForm {
 					$modifier->updateMyField(Convert::raw2sql($data["MyField"]));
 					$modifier->updateMyReduction(floatval($data["MyReduction"]));
 					$modifier->write();
+					return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.UPDATED", "Updated modifier successfully.", "good"));
 				}
 			}
 		}
-		return parent::submit($data, $form);
+		return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.UPDATED", "Updated not successfully updated.", "bad"));
 	}
 }
