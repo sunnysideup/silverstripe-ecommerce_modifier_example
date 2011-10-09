@@ -140,7 +140,30 @@ class ModifierExample extends OrderModifier {
 		parent::onBeforeWrite();
 	}
 
+	function onBeforeRemove(){
+		$this->MyReduction = 0;
+		$this->MyField = "";
+		parent::onBeforeRemove();
+	}
+
 // ######################################## *** AJAX related functions
+	/**
+	* some modifiers can be hidden after an ajax update (e.g. if someone enters a discount coupon and it does not exist).
+	* There might be instances where ShowInTable (the starting point) is TRUE and HideInAjaxUpdate return false.
+	*@return Boolean
+	**/
+	public function HideInAjaxUpdate() {
+		//we check if the parent wants to hide it...
+		//we need to do this first in case it is being removed.
+		if(parent::HideInAjaxUpdate()) {
+			return true;
+		}
+		// we do NOT hide it if values have been entered
+		if($this->MyField && $this->MyReduction) {
+			return false;
+		}
+		return true;
+	}
 // ######################################## *** debug functions
 
 }
