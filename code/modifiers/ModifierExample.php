@@ -48,12 +48,14 @@ class ModifierExample extends OrderModifier {
 	 * With this, we also need to create the methods
 	 * Live{functionName}
 	 * e.g LiveMyField() and LiveMyReduction() in this case...
-	 **/
-
-	public function runUpdate() {
-		$this->checkField("MyField");
-		$this->checkField("MyReduction");
-		parent::runUpdate();
+	 * @param Bool $force - run it, even if it has run already
+	 */
+	public function runUpdate($force = false) {
+		if(!$this->IsRemoved()) {
+			$this->checkField("MyField");
+			$this->checkField("MyReduction");
+		}
+		parent::runUpdate($force);
 	}
 
 	function updateMyField($s) {
@@ -73,6 +75,7 @@ class ModifierExample extends OrderModifier {
 
 	function getModifierForm($controller) {
 		$fields = new FieldSet();
+		$fields->push(new HeaderField('ModifierExample', "Example Order Modifier", 4));
 		$fields->push(new TextField('MyField', "enter value for testing", $this->MyField));
 		$fields->push(new NumericField('MyReduction', "what discount would you like?", $this->MyReduction));
 		$validator = null;
@@ -125,7 +128,7 @@ class ModifierExample extends OrderModifier {
 		return $this->MyReduction;
 	}
 
-	protected function LiveCalculationValue() {
+	protected function LiveCalculatedTotal() {
 		return (intval($this->MyReduction) - 0) * -1;
 	}
 
