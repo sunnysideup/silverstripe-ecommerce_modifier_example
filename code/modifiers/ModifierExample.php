@@ -93,10 +93,6 @@ class ModifierExample extends OrderModifier {
 	public function CanBeRemoved() {
 		return true;
 	}
-	public function TableValue() {
-		return $this->MyReduction;
-	}
-
 	public function TableTitle() {return $this->getTableTitle();}
 	public function getTableTitle() {
 		return $this->MyField;
@@ -130,6 +126,9 @@ class ModifierExample extends OrderModifier {
 
 	protected function LiveCalculatedTotal() {
 		return (intval($this->MyReduction) - 0) * -1;
+	}
+	public function LiveTableValue() {
+		return $this->LiveCalculatedTotal();
 	}
 
 
