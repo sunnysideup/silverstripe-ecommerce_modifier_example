@@ -4,10 +4,10 @@
  * @author Nicolaas [at] sunnysideup.co.nz
  * @package: ecommerce
  * @sub-package: ecommerce_delivery
- * @description: Shipping calculation scheme based on SimpleShippingModifier.
- * It lets you set fixed shipping costs, or a fixed
- * cost for each region you're delivering to.
- */
+ * @description: This is an example modifier that developers can use
+ * as a starting point for writing their own modifiers.
+ *
+ **/
 class ModifierExample extends OrderModifier {
 
 // ######################################## *** model defining static variables (e.g. $db, $has_one)
@@ -37,7 +37,8 @@ class ModifierExample extends OrderModifier {
 // ######################################## *** other (non) static variables (e.g. protected static $special_name_for_something, protected $order)
 
 	protected static $form_header = 'Modifier Example';
-		static function set_form_header(string $s) {self::$form_header = $s;}
+		static function set_form_header($s) {self::$form_header = $s;}
+		static function get_form_header() {return self::$form_header;}
 
 // ######################################## *** CRUD functions (e.g. canEdit)
 // ######################################## *** init and update functions
@@ -181,7 +182,7 @@ class ModifierExample_Form extends OrderModifierForm {
 		$order = ShoppingCart::current_order();
 		$modifiers = $order->Modifiers();
 		foreach($modifiers as $modifier) {
-			if (get_class($modifier) == 'ModifierExample') {
+			if (is_a($modifier, 'ModifierExample')) {
 				if(isset($data['MyField'])) {
 					$modifier->updateMyField(Convert::raw2sql($data["MyField"]));
 					$modifier->updateMyReduction(floatval($data["MyReduction"]));
@@ -190,6 +191,6 @@ class ModifierExample_Form extends OrderModifierForm {
 				}
 			}
 		}
-		return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.UPDATED", "Updated not successfully updated.", "bad"));
+		return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.NOTUPDATED", "Updated not successfully updated.", "bad"));
 	}
 }
