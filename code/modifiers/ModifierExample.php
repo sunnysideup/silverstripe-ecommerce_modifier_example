@@ -23,6 +23,9 @@ class ModifierExample extends OrderModifier {
 
 // ######################################## *** cms variables + functions (e.g. getCMSFields, $searchableFields)
 
+	/**
+	 * standard SS method
+	 */
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
 		return $fields;
@@ -36,6 +39,10 @@ class ModifierExample extends OrderModifier {
 
 // ######################################## *** other (non) static variables (e.g. protected static $special_name_for_something, protected $order)
 
+	/**
+	 * Header shown at the top of the form
+	 * @var String
+	 */
 	protected static $form_header = 'Modifier Example';
 		static function set_form_header($s) {self::$form_header = $s;}
 		static function get_form_header() {return self::$form_header;}
@@ -59,24 +66,48 @@ class ModifierExample extends OrderModifier {
 		parent::runUpdate($force);
 	}
 
-	function updateMyField($s) {
+
+	/**
+	 * allows you to save a new value to MyField
+	 * @param String $s
+	 */
+	public function updateMyField($s, $write = true) {
 		$this->MyField = $s;
+		if($write) {
+			$this->write();
+		}
 	}
 
-	function updateMyReduction($int) {
+	/**
+	 * allows you to save a new value to MyReduction
+	 * @param Integer $int
+	 */
+	public function updateMyReduction($int, $write = true) {
 		$this->MyReduction = $int;
+		if($write) {
+			$this->write();
+		}
 	}
 
 // ######################################## *** form functions (e. g. showform and getform)
 
-
+	/**
+	 * standard OrderModifier Method
+	 * Should we show a form in the checkout page for this modifier?
+	 */
 	public function showForm() {
 		return $this->Order()->Items();
 	}
 
+	/**
+	 * standard OrderModifier Method
+	 * This method returns the form for the checkout page.
+	 * @param Object $controller = Controller object for form
+	 * @return Object - ModifierExample_Form
+	 */
 	function getModifierForm($controller) {
 		$fields = new FieldSet();
-		$fields->push(new HeaderField('ModifierExample', "Example Order Modifier", 4));
+		$fields->push(new HeaderField('ModifierExample', self::get_form_header(), 4));
 		$fields->push(new TextField('MyField', "enter value for testing", $this->MyField));
 		$fields->push(new NumericField('MyReduction', "what discount would you like?", $this->MyReduction));
 		$validator = null;
@@ -88,15 +119,22 @@ class ModifierExample extends OrderModifier {
 
 // ######################################## *** template functions (e.g. ShowInTable, TableTitle, etc...) ... USES DB VALUES
 
+	/**
+	 * standard OrderModifer Method
+	 * Tells us if the modifier should take up a row in the table on the checkout page.
+	 * @return Boolean
+	 */
 	public function ShowInTable() {
 		return true;
 	}
+
+	/**
+	 * standard OrderModifer Method
+	 * Tells us if the modifier can be removed (hidden / turned off) from the order.
+	 * @return Boolean
+	 */
 	public function CanBeRemoved() {
 		return true;
-	}
-	public function TableTitle() {return $this->getTableTitle();}
-	public function getTableTitle() {
-		return $this->MyField;
 	}
 
 // ######################################## ***  inner calculations.... USES CALCULATED VALUES
@@ -110,8 +148,6 @@ class ModifierExample extends OrderModifier {
 	 * (defined in the OrderModifer class) then we can do this
 	 * as shown in the method below.
 	 * You may choose to return an empty string or just a standard message.
-	 *
-	 *
 	 **/
 	protected function LiveName() {
 		return "EXAMPLE: ".$this->LiveMyField();
@@ -128,6 +164,7 @@ class ModifierExample extends OrderModifier {
 	protected function LiveCalculatedTotal() {
 		return (intval($this->MyReduction) - 0) * -1;
 	}
+
 	public function LiveTableValue() {
 		return $this->LiveCalculatedTotal();
 	}
@@ -184,13 +221,15 @@ class ModifierExample_Form extends OrderModifierForm {
 		foreach($modifiers as $modifier) {
 			if (is_a($modifier, 'ModifierExample')) {
 				if(isset($data['MyField'])) {
-					$modifier->updateMyField(Convert::raw2sql($data["MyField"]));
-					$modifier->updateMyReduction(floatval($data["MyReduction"]));
-					$modifier->write();
-					return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.UPDATED", "Updated modifier successfully.", "good"));
+					$modifier->updateMyField(Convert::raw2sql($data["MyField"]), false);
 				}
+				if(isset($data['MyReduction'])) {
+					$modifier->updateMyReduction(floatval($data["MyReduction"]), false);
+				}
+				$modifier->write()
+				return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.UPDATED", "Updated modifier successfully.", "good"));
 			}
 		}
-		return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.NOTUPDATED", "Updated not successfully updated.", "bad"));
+		return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.NOTUPDATED", "Modifier not successfully updated.", "bad"));
 	}
 }
