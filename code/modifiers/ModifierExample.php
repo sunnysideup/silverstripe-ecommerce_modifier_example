@@ -226,7 +226,7 @@ class ModifierExample_Form extends OrderModifierForm {
 				if(isset($data['MyReduction'])) {
 					$modifier->updateMyReduction(floatval($data["MyReduction"]), false);
 				}
-				$modifier->write()
+				$modifier->write();
 				return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.UPDATED", "Updated modifier successfully.", "good"));
 			}
 		}
