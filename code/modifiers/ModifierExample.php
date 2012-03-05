@@ -3,7 +3,7 @@
 /**
  * @author Nicolaas [at] sunnysideup.co.nz
  * @package: ecommerce
- * @sub-package: ecommerce_delivery
+ * @sub-package: examples
  * @description: This is an example modifier that developers can use
  * as a starting point for writing their own modifiers.
  *
@@ -32,20 +32,13 @@ class ModifierExample extends OrderModifier {
 	}
 
 	public static $singular_name = "Modifier Example";
-		function i18n_single_name() { return _t("ModifierExample.MODIFIEREXAMPLE", "Modifier Example");}
+		function i18n_singular_name() { return _t("ModifierExample.MODIFIEREXAMPLE", "Modifier Example");}
 
 	public static $plural_name = "Modifier Examples";
 		function i18n_plural_name() { return _t("ModifierExample.MODIFIEREXAMPLES", "Modifier Examples");}
 
 // ######################################## *** other (non) static variables (e.g. protected static $special_name_for_something, protected $order)
 
-	/**
-	 * Header shown at the top of the form
-	 * @var String
-	 */
-	protected static $form_header = 'Modifier Example';
-		static function set_form_header($s) {self::$form_header = $s;}
-		static function get_form_header() {return self::$form_header;}
 
 // ######################################## *** CRUD functions (e.g. canEdit)
 // ######################################## *** init and update functions
@@ -53,9 +46,10 @@ class ModifierExample extends OrderModifier {
 	/**
 	 * For all modifers with their own database fields, we need to include this...
 	 * It will update each of the fields.
-	 * With this, we also need to create the methods
+	 * Within this method, we need to create the methods
 	 * Live{functionName}
 	 * e.g LiveMyField() and LiveMyReduction() in this case...
+	 * The OrderModifier already updates the basic database fields.
 	 * @param Bool $force - run it, even if it has run already
 	 */
 	public function runUpdate($force = false) {
@@ -70,6 +64,7 @@ class ModifierExample extends OrderModifier {
 	/**
 	 * allows you to save a new value to MyField
 	 * @param String $s
+	 * @param Boolean $write - write to database (you may want to set this to false if you do several updates)
 	 */
 	public function updateMyField($s, $write = true) {
 		$this->MyField = $s;
@@ -105,16 +100,16 @@ class ModifierExample extends OrderModifier {
 	 * @param Object $controller = Controller object for form
 	 * @return Object - ModifierExample_Form
 	 */
-	function getModifierForm($controller) {
+	function getModifierForm($optionalController = null, $optionalValidator = null) {
 		$fields = new FieldSet();
-		$fields->push(new HeaderField('ModifierExample', self::get_form_header(), 4));
+		$fields->push($this->headingField());
+		$fields->push($this->descriptionField());
 		$fields->push(new TextField('MyField', "enter value for testing", $this->MyField));
 		$fields->push(new NumericField('MyReduction', "what discount would you like?", $this->MyReduction));
-		$validator = null;
 		$actions = new FieldSet(
 			new FormAction('submit', 'Update Order')
 		);
-		return new ModifierExample_Form($controller, 'ModifierExample', $fields, $actions, $validator);
+		return new ModifierExample_Form($optionalController, 'ModifierExample', $fields, $actions, $optionalValidator);
 	}
 
 // ######################################## *** template functions (e.g. ShowInTable, TableTitle, etc...) ... USES DB VALUES
@@ -210,8 +205,8 @@ class ModifierExample extends OrderModifier {
 
 class ModifierExample_Form extends OrderModifierForm {
 
-	function __construct($optionalController = null, $name,FieldSet $fields, FieldSet $actions,$validator = null) {
-		parent::__construct($optionalController, $name,$fields,$actions,$validator);
+	function __construct($optionalController = null, $name,FieldSet $fields, FieldSet $actions,$optionalValidator = null) {
+		parent::__construct($optionalController, $name,$fields,$actions,$optionalValidator);
 		Requirements::javascript("ecommerce_modifier_example/javascript/ModifierExample.js");
 	}
 
