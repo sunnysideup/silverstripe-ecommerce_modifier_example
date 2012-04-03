@@ -204,7 +204,9 @@ class ModifierExample extends OrderModifier {
 }
 
 class ModifierExample_Form extends OrderModifierForm {
-
+	/**
+	 *
+	 */
 	function __construct($optionalController = null, $name,FieldSet $fields, FieldSet $actions,$optionalValidator = null) {
 		parent::__construct($optionalController, $name,$fields,$actions,$optionalValidator);
 		Requirements::javascript("ecommerce_modifier_example/javascript/ModifierExample.js");
