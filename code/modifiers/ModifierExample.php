@@ -214,16 +214,17 @@ class ModifierExample_Form extends OrderModifierForm {
 
 	public function submit($data, $form) {
 		$order = ShoppingCart::current_order();
-		$modifiers = $order->Modifiers();
-		foreach($modifiers as $modifier) {
-			if (is_a($modifier, 'ModifierExample')) {
-				if(isset($data['MyField'])) {
-					$modifier->updateMyField(Convert::raw2sql($data["MyField"]), false);
+		if($order) {
+			if($modifiers = $order->Modifiers("ModifierExample")) {
+				foreach($modifiers as $modifier) {
+					if(isset($data['MyField'])) {
+						$modifier->updateMyField(Convert::raw2sql($data["MyField"]), false);
+					}
+					if(isset($data['MyReduction'])) {
+						$modifier->updateMyReduction(floatval($data["MyReduction"]), false);
+					}
+					$modifier->write();
 				}
-				if(isset($data['MyReduction'])) {
-					$modifier->updateMyReduction(floatval($data["MyReduction"]), false);
-				}
-				$modifier->write();
 				return ShoppingCart::singleton()->setMessageAndReturn(_t("ModifierExample.UPDATED", "Updated modifier successfully.", "good"));
 			}
 		}
