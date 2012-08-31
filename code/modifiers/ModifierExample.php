@@ -90,10 +90,27 @@ class ModifierExample extends OrderModifier {
 	 * standard OrderModifier Method
 	 * Should we show a form in the checkout page for this modifier?
 	 */
-	public function showForm() {
+	public function ShowForm() {
 		return $this->Order()->Items();
 	}
 
+	/**
+	 * Should the form be included in the editable form
+	 * on the checkout page?
+	 * @return Boolean
+	 */
+	public function ShowFormInEditableOrderTable() {
+		return false;
+	}
+
+	/**
+	 * Should the form be included in the editable form
+	 * on the checkout page?
+	 * @return Boolean
+	 */
+	public function ShowFormOutsideEditableOrderTable() {
+		return true;
+	}
 	/**
 	 * standard OrderModifier Method
 	 * This method returns the form for the checkout page.
