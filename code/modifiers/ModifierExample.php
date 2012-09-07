@@ -100,7 +100,7 @@ class ModifierExample extends OrderModifier {
 	 * @return Boolean
 	 */
 	public function ShowFormInEditableOrderTable() {
-		return false;
+		return rand(0,1);
 	}
 
 	/**
