@@ -84,7 +84,7 @@ class ModifierExample extends OrderModifier {
 		}
 	}
 
-// ######################################## *** form functions (e. g. showform and getform)
+// ######################################## *** form functions (e. g. Showform and getform)
 
 	/**
 	 * standard OrderModifier Method
