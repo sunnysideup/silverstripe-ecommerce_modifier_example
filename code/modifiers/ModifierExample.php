@@ -100,7 +100,10 @@ class ModifierExample extends OrderModifier {
 	 * @return Boolean
 	 */
 	public function ShowFormInEditableOrderTable() {
-		return rand(0,1);
+		if($this->exists()) {
+			return $this->ID % 2 ? true : false;
+		}
+		return false;
 	}
 
 	/**
@@ -109,7 +112,7 @@ class ModifierExample extends OrderModifier {
 	 * @return Boolean
 	 */
 	public function ShowFormOutsideEditableOrderTable() {
-		return true;
+		return $this->ShowFormInEditableOrderTable() ? false : true;
 	}
 	/**
 	 * standard OrderModifier Method
