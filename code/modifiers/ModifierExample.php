@@ -53,10 +53,12 @@ class ModifierExample extends OrderModifier {
 	 * @param Bool $force - run it, even if it has run already
 	 */
 	public function runUpdate($force = false) {
+		if (isset($_GET['debug_profile'])) Profiler::mark('ModifierExample::runUpdate');
 		if(!$this->IsRemoved()) {
 			$this->checkField("MyField");
 			$this->checkField("MyReduction");
 		}
+		if (isset($_GET['debug_profile'])) Profiler::unmark('ModifierExample::runUpdate');
 		parent::runUpdate($force);
 	}
 
