@@ -1,5 +1,5 @@
 {
-	"name": "silverstripe/ecommerce_modifier_example",
+	"name": "sunnysideup/ecommerce_modifier_example",
 	"type": "silverstripe-module",
 	"description": "provides an example of a modifier to help you create your own modifiers",
 	"homepage": "http://www.silverstripe-ecommerce.com",
