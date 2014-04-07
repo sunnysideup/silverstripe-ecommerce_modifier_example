@@ -1,7 +1,6 @@
-###############################################
+
 ecommerce modifier example
-Pre 0.1 proof of concept
-###############################################
+================================================================================
 
 This modifier only exists to show developers
 how to write and use a modifier within e-commerce
