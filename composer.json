@@ -1,22 +1,27 @@
 {
-	"name": "sunnysideup/ecommerce_modifier_example",
-	"type": "silverstripe-module",
-	"description": "provides an example of a modifier to help you create your own modifiers",
-	"homepage": "http://www.silverstripe-ecommerce.com",
-	"keywords": ["ecommerce", "e-commerce", "shop", "modifier_example","modifier", "silverstripe"],
-	"license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
-	"authors":[
-		{
-			"name": "Nicolaas Francken",
-			"homepage": "https://github.com/sunnysideup",
-			"email" : "modules@sunnysideup.co.nz",
-			"role" : "lead developer"
-		}
-	],
-	"require":{
-		"php": ">=5.3.2",
-		"silverstripe/framework": "~2.4",
-		"silverstripe/cms": "~2.4",
-		"sunnysideup/ecommerce": "~2.4"
-	}
+    "name": "sunnysideup/ecommerce_modifier_example",
+    "type": "silverstripe-module",
+    "description": "provides an example of a modifier to help you create your own modifiers",
+    "keywords": [
+        "ecommerce",
+        "e-commerce",
+        "shop",
+        "modifier_example",
+        "modifier",
+        "silverstripe"
+    ],
+    "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
+    "authors": [
+        {
+            "name": "Nicolaas Francken",
+            "email": "modules@sunnysideup.co.nz",
+            "role": "lead developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "silverstripe/framework": "~2.4",
+        "silverstripe/cms": "~2.4",
+        "sunnysideup/ecommerce": "~2.4"
+    }
 }
