@@ -3,12 +3,14 @@
     "type": "silverstripe-module",
     "description": "provides an example of a modifier to help you create your own modifiers",
     "keywords": [
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe",
         "ecommerce",
         "e-commerce",
         "shop",
         "modifier_example",
-        "modifier",
-        "silverstripe"
+        "modifier"
     ],
     "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
     "authors": [
