@@ -11,7 +11,7 @@
 class ModifierExample extends OrderModifier
 {
 
-// ######################################## *** model defining static variables (e.g. $db, $has_one)
+    // ######################################## *** model defining static variables (e.g. $db, $has_one)
 
     /**
      * add extra fields as you need them.
